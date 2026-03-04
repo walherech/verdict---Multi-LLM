@@ -86,7 +86,7 @@ export function GateScreen({ onEnter, productName }: GateScreenProps) {
           className="text-xs text-gray-700 mt-12"
           style={{ fontFamily: "'Inter', sans-serif" } as React.CSSProperties}
         >
-          Early access — CLEAR community only
+          Early access — One Percent Playbook community only
         </p>
       </div>
     </div>
