@@ -5,19 +5,19 @@ import './globals.css'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Chorus - 4 AI Minds in Perfect Harmony',
-  description: 'Perplexity researches. Claude analyzes. GPT-4 synthesizes. Grok critiques. Every problem gets the collective intelligence it deserves.',
+  title: 'Verdict — Multiple AIs. One Answer.',
+  description: 'Multiple AIs. One answer. No mercy.',
   keywords: ['AI', 'problem solving', 'multi-LLM', 'artificial intelligence', 'collaborative AI'],
-  authors: [{ name: 'Chorus Team' }],
+  authors: [{ name: 'Verdict' }],
   openGraph: {
-    title: 'Chorus - 4 AI Minds in Perfect Harmony',
-    description: 'Perplexity researches. Claude analyzes. GPT-4 synthesizes. Grok critiques. Every problem gets the collective intelligence it deserves.',
+    title: 'Verdict — Multiple AIs. One Answer.',
+    description: 'Multiple AIs. One answer. No mercy.',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Chorus - 4 AI Minds in Perfect Harmony',
-    description: 'Perplexity researches. Claude analyzes. GPT-4 synthesizes. Grok critiques. Every problem gets the collective intelligence it deserves.',
+    title: 'Verdict — Multiple AIs. One Answer.',
+    description: 'Multiple AIs. One answer. No mercy.',
   },
 }
 
