@@ -21,7 +21,7 @@ function modelColor(score: number | null): string {
   return '#6366f1';
 }
 
-export function Scoreboard({ soloBenchmarks, engineScore, engineModelLabel = 'Engine' }: ScoreboardProps) {
+export function Scoreboard({ soloBenchmarks, engineScore, engineModelLabel = 'Verdict' }: ScoreboardProps) {
   const allModels = ['Perplexity', 'Claude', 'GPT-4', 'Grok'];
   const byModel = Object.fromEntries(soloBenchmarks.map((b) => [b.model, b]));
 

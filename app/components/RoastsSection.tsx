@@ -61,7 +61,7 @@ export function RoastsSection({ soloCommentary, engineCommentary, disclaimer, sh
         ))}
         {engineCommentary && (
           <div className="rounded-xl border border-amber-500/40 bg-amber-500/10 p-4">
-            <p className="text-sm font-medium text-amber-400">Engine</p>
+            <p className="text-sm font-medium text-amber-400">Verdict</p>
             <p className="mt-1 text-white">{engineCommentary}</p>
           </div>
         )}

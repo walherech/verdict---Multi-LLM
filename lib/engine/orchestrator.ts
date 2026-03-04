@@ -149,7 +149,7 @@ async function generateSoloCommentary(
     benchModels.length > 0
       ? `\nThe following models were NOT in this sequence and did not answer: ${benchModels.join(', ')}. Give each one a short roast (1 sentence) for sitting on the bench. Match the active personality mode. Add to your JSON: "benchCommentary": [{"model": "Perplexity", "roast": "..."}] with no score field.`
       : '';
-  const systemPrompt = `You are commentating on AI model performance. These models each tried to answer a prompt on their own. Generate a one-liner roast/commentary for each solo model and a final line for the engine. Use ${personality.toUpperCase()} style. Be punchy (1-2 sentences max per model). Respond with ONLY a JSON object, no markdown:
+  const systemPrompt = `You are commentating on AI model performance. These models each tried to answer a prompt on their own. Generate a one-liner roast/commentary for each solo model and a final line for the Verdict. Use ${personality.toUpperCase()} style. Be punchy (1-2 sentences max per model). Respond with ONLY a JSON object, no markdown:
 {
   "soloCommentary": [
     {"model": "Perplexity", "score": 48, "roast": "..."},
@@ -161,7 +161,7 @@ async function generateSoloCommentary(
   "engineCommentary": "..."
 }
 The soloCommentary array must have one entry per model that participated, in the same order. Use the exact model names and scores provided.${benchLine}`;
-  const userContent = `Solo benchmark scores:\n${scoreLines}\n\nThe engine combined their work and scored: ${engineScore}%${benchModels.length > 0 ? `\n\nModels that sat out (give each a bench roast): ${benchModels.join(', ')}` : ''}\n\nGenerate commentary in ${personality} style.`;
+  const userContent = `Solo benchmark scores:\n${scoreLines}\n\nThe Verdict combined their work and scored: ${engineScore}%${benchModels.length > 0 ? `\n\nModels that sat out (give each a bench roast): ${benchModels.join(', ')}` : ''}\n\nGenerate commentary in ${personality} style.`;
   const raw = await callClaude(userContent, systemPrompt);
   try {
     let jsonStr = raw.trim();
