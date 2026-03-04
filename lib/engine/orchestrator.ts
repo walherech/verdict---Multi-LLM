@@ -140,7 +140,7 @@ async function generateSoloCommentary(
       score: b.score as number,
       roast: `Solo score: ${b.score}%. ${b.responseSnippet.slice(0, 80)}...`,
     }));
-    const benchEntries = benchModels.map((m) => ({ model: m, score: null as number | null, roast: 'Did not participate in this run.' }));
+    const benchEntries = benchModels.map((m) => ({ model: m, score: null, roast: 'Did not participate in this run.' })) as (CommentaryEntry & { score: number | null })[];
     return [...participantEntries, ...benchEntries];
   }
 
