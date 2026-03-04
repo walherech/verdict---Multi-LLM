@@ -170,7 +170,7 @@ export default function HomePage() {
               solution={result.solution}
               engineScore={meta?.engineScore}
               showScores={showScoresFromApi}
-              meta={{ mode: meta?.mode, totalModelsRun: meta?.totalModelsRun }}
+              meta={{ mode: meta?.mode, totalModelsRun: (meta as any)?.totalModelsRun }}
               solveTime={result.solveTime}
             />
 
