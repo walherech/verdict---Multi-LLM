@@ -186,7 +186,7 @@ The soloCommentary array must have one entry per model that participated, in the
     } else {
       participantEntries.push(...soloBenchmarks.map((b) => ({ model: b.model, score: b.score, roast: '' })));
     }
-    const benchEntries: (CommentaryEntry & { score: null })[] = [];
+    const benchEntries: any[] = [];
     if (benchModels.length > 0 && Array.isArray(parsed.benchCommentary)) {
       for (const m of benchModels) {
         const c = parsed.benchCommentary.find((x) => (typeof x.model === 'string' ? x.model : '') === m);
@@ -199,13 +199,13 @@ The soloCommentary array must have one entry per model that participated, in the
     } else if (benchModels.length > 0) {
       benchEntries.push(...benchModels.map((m) => ({ model: m, score: null as null, roast: `${m} did not participate.` })));
     }
-    return [...participantEntries, ...benchEntries];
+    return [...participantEntries, ...benchEntries] as any;
   } catch (e) {
     console.error('[Orchestrator] Solo commentary parse failed:', e);
   }
   const fallback = soloBenchmarks.map((b) => ({ model: b.model, score: b.score as number | null, roast: '' }));
   const benchFallback = benchModels.map((m) => ({ model: m, score: null as number | null, roast: `${m} sat this one out.` }));
-  return [...fallback, ...benchFallback];
+  return [...fallback, ...benchFallback] as any;
 }
 
 interface ParallelResult {
