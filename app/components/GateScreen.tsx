@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 
-const ACCESS_CODE = process.env.NEXT_PUBLIC_ACCESS_CODE || 'clear2026';
+const ACCESS_CODE = process.env.NEXT_PUBLIC_ACCESS_CODE || 'OPP2026';
 
 interface GateScreenProps {
   onEnter: () => void;
