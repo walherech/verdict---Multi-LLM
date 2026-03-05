@@ -166,6 +166,22 @@ export default function HomePage() {
 
         {!loading && result && (
           <div className="animate-in fade-in duration-500">
+            {showScoresFromApi && meta && (
+              <RoastsSection
+                soloCommentary={meta.soloCommentary}
+                engineCommentary={meta.engineCommentary ?? ''}
+                disclaimer={meta.disclaimer ?? ''}
+                showScores={showScoresFromApi}
+              />
+            )}
+
+            {showScoresFromApi && meta && (
+              <Scoreboard
+                soloBenchmarks={meta.soloBenchmarks}
+                engineScore={meta.engineScore}
+              />
+            )}
+
             <AnswerCard
               solution={result.solution}
               engineScore={meta?.engineScore}
@@ -173,21 +189,6 @@ export default function HomePage() {
               meta={{ mode: meta?.mode, totalModelsRun: (meta as any)?.totalModelsRun }}
               solveTime={result.solveTime}
             />
-
-            {showScoresFromApi && meta && (
-              <>
-                <Scoreboard
-                  soloBenchmarks={meta.soloBenchmarks}
-                  engineScore={meta.engineScore}
-                />
-                <RoastsSection
-                  soloCommentary={meta.soloCommentary}
-                  engineCommentary={meta.engineCommentary ?? ''}
-                  disclaimer={meta.disclaimer ?? ''}
-                  showScores={showScoresFromApi}
-                />
-              </>
-            )}
 
             <SoloResponsesAccordion
               research={result.research ?? ''}
