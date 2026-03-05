@@ -28,17 +28,17 @@ export function RoastsSection({ soloCommentary, engineCommentary, disclaimer, sh
       <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-widest font-mono mb-3">
         ROASTS & COMMENTARY 🔥
       </h3>
-      <div className="flex flex-col gap-2">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-2">
         {soloCommentary.map((c) => (
           <div
             key={c.model}
-            className={`rounded-xl border p-4 flex gap-4 items-start ${
+            className={`rounded-xl border p-4 flex flex-col gap-2 ${
               c.score === null
                 ? 'bg-[#0a0a0a] border-dashed border-[#1a1a1a]'
                 : 'bg-[#0c0c0c] border-[#1a1a1a]'
             }`}
           >
-            <div className="min-w-[56px] text-center">
+            <div className="flex items-center gap-2">
               <span
                 className="text-[11px] font-bold font-mono"
                 style={{ color: modelColor(c.score) }}
@@ -46,19 +46,19 @@ export function RoastsSection({ soloCommentary, engineCommentary, disclaimer, sh
                 {c.model}
               </span>
               {showScores && c.score != null && (
-                <div className="mt-1 flex justify-center">
-                  <ScoreBadge score={c.score} size="sm" />
-                </div>
+                <ScoreBadge score={c.score} size="sm" />
               )}
               {showScores && c.score === null && (
-                <div className="text-[9px] text-gray-600 font-mono mt-1">DNP</div>
+                <span className="text-[9px] text-gray-600 font-mono">DNP</span>
               )}
             </div>
-            <p className={`text-sm text-gray-400 leading-relaxed mt-0 italic ${c.score === null ? 'text-gray-600' : ''}`}>
+            <p className={`text-sm leading-relaxed italic ${c.score === null ? 'text-gray-600' : 'text-gray-400'}`}>
               &quot;{c.roast || '—'}&quot;
             </p>
           </div>
         ))}
+      </div>
+      <div className="flex flex-col gap-2">
         {engineCommentary && (
           <div className="rounded-xl border border-amber-500/40 bg-amber-500/10 p-4">
             <p className="text-sm font-medium text-amber-400">Verdict</p>
