@@ -1,7 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { GateScreen } from '@/app/components/GateScreen';
+import { useSession } from 'next-auth/react';
+import { SignInScreen } from '@/app/components/SignInScreen';
 import { InputSection, type ResponseMode, type Personality } from '@/app/components/InputSection';
 import { LoadingSection } from '@/app/components/LoadingSection';
 import { AnswerCard } from '@/app/components/AnswerCard';
@@ -9,6 +10,7 @@ import { Scoreboard } from '@/app/components/Scoreboard';
 import { RoastsSection } from '@/app/components/RoastsSection';
 import { SoloResponsesAccordion } from '@/app/components/SoloResponsesAccordion';
 import { Footer } from '@/app/components/Footer';
+import Image from 'next/image';
 
 const PRODUCT_NAME = 'VERDICT';
 
@@ -38,7 +40,7 @@ interface ApiResult {
 }
 
 export default function HomePage() {
-  const [authenticated, setAuthenticated] = useState(false);
+  const { data: session, status } = useSession();
   const [input, setInput] = useState('');
   const [mode, setMode] = useState<ResponseMode>('deep');
   const [personality, setPersonality] = useState<Personality>('savage');
@@ -83,9 +85,20 @@ export default function HomePage() {
   const meta = result?.meta;
   const showScoresFromApi = meta?.showScores ?? showScores;
 
-  if (!authenticated) {
-    return <GateScreen onEnter={() => setAuthenticated(true)} productName={PRODUCT_NAME} />;
+  if (status === 'loading') {
+    return (
+      <div className="min-h-screen bg-[#060606] flex items-center justify-center">
+        <span className="text-gray-600 text-sm font-mono">Loading...</span>
+      </div>
+    );
   }
+
+  if (!session) {
+    return <SignInScreen productName={PRODUCT_NAME} />;
+  }
+
+  const user = session.user;
+  const initials = user?.name ? user.name.split(' ').map((n) => n[0]).join('').slice(0, 2).toUpperCase() : '?';
 
   return (
     <main className="min-h-screen bg-[#060606] text-gray-200">
@@ -97,11 +110,24 @@ export default function HomePage() {
             BETA
           </span>
         </div>
-        <div className="flex items-center gap-4 text-[13px] text-gray-500">
+        <div className="flex items-center gap-3 text-[13px] text-gray-500">
           <span className="font-mono text-xs">8 / 50 queries</span>
-          <div className="w-8 h-8 rounded-full bg-amber-500/20 flex items-center justify-center text-[13px] font-semibold text-amber-500">
-            S
-          </div>
+          {user?.image ? (
+            <Image
+              src={user.image}
+              alt={user.name ?? 'User avatar'}
+              width={32}
+              height={32}
+              className="w-8 h-8 rounded-full object-cover"
+            />
+          ) : (
+            <div className="w-8 h-8 rounded-full bg-amber-500/20 flex items-center justify-center text-[13px] font-semibold text-amber-500">
+              {initials}
+            </div>
+          )}
+          {user?.name && (
+            <span className="text-[13px] text-gray-400 hidden sm:block">{user.name.split(' ')[0]}</span>
+          )}
         </div>
       </header>
 
