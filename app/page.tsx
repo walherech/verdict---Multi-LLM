@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { SignInScreen } from '@/app/components/SignInScreen';
 import { InputSection, type ResponseMode, type Personality } from '@/app/components/InputSection';
@@ -13,6 +13,12 @@ import { Footer } from '@/app/components/Footer';
 import Image from 'next/image';
 
 const PRODUCT_NAME = 'VERDICT';
+
+interface UserRecord {
+  tier: string;
+  queries_used: number;
+  queries_limit: number;
+}
 
 interface ApiResult {
   solution: string;
@@ -41,6 +47,7 @@ interface ApiResult {
 
 export default function HomePage() {
   const { data: session, status } = useSession();
+  const [userRecord, setUserRecord] = useState<UserRecord | null>(null);
   const [input, setInput] = useState('');
   const [mode, setMode] = useState<ResponseMode>('deep');
   const [personality, setPersonality] = useState<Personality>('savage');
@@ -49,6 +56,18 @@ export default function HomePage() {
   const [loadingStartTime, setLoadingStartTime] = useState<number | null>(null);
   const [result, setResult] = useState<ApiResult | null>(null);
   const [error, setError] = useState<string | null>(null);
+
+  // Sync user with Supabase on sign-in
+  useEffect(() => {
+    if (session?.user?.email) {
+      fetch('/api/user/sync', { method: 'POST' })
+        .then((r) => r.json())
+        .then((data) => {
+          if (data.tier) setUserRecord(data);
+        })
+        .catch(console.error);
+    }
+  }, [session?.user?.email]);
 
   async function handleSubmit() {
     const problem = input.trim();
@@ -61,12 +80,7 @@ export default function HomePage() {
       const res = await fetch('/api/solve', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          problem,
-          personality,
-          mode,
-          showScores,
-        }),
+        body: JSON.stringify({ problem, personality, mode, showScores }),
       });
       const data = await res.json();
       if (!res.ok) {
@@ -74,6 +88,27 @@ export default function HomePage() {
         return;
       }
       setResult(data);
+
+      // Log the query and update counts
+      const logRes = await fetch('/api/query/log', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          query: problem,
+          mode,
+          personality,
+          result: {
+            engineScore: data.meta?.engineScore ?? null,
+            solveTime: data.solveTime ?? null,
+            modelsUsed: data.modelsUsed ?? [],
+            soloBenchmarks: data.meta?.soloBenchmarks ?? [],
+          },
+        }),
+      });
+      if (logRes.ok) {
+        const counts = await logRes.json();
+        setUserRecord((prev) => prev ? { ...prev, ...counts } : counts);
+      }
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Something went wrong');
     } finally {
@@ -99,6 +134,8 @@ export default function HomePage() {
 
   const user = session.user;
   const initials = user?.name ? user.name.split(' ').map((n) => n[0]).join('').slice(0, 2).toUpperCase() : '?';
+  const queriesUsed = userRecord?.queries_used ?? '—';
+  const queriesLimit = userRecord?.queries_limit ?? '—';
 
   return (
     <main className="min-h-screen bg-[#060606] text-gray-200">
@@ -111,7 +148,7 @@ export default function HomePage() {
           </span>
         </div>
         <div className="flex items-center gap-3 text-[13px] text-gray-500">
-          <span className="font-mono text-xs">8 / 50 queries</span>
+          <span className="font-mono text-xs">{queriesUsed} / {queriesLimit} queries</span>
           {user?.image ? (
             <Image
               src={user.image}
