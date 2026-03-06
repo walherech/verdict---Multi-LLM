@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { SignInScreen } from '@/app/components/SignInScreen';
+import VerdictLanding from '@/app/components/LandingPage';
 import { InputSection, type ResponseMode, type Personality } from '@/app/components/InputSection';
 import { LoadingSection } from '@/app/components/LoadingSection';
 import { AnswerCard } from '@/app/components/AnswerCard';
@@ -156,7 +156,7 @@ export default function HomePage() {
   }
 
   if (!session) {
-    return <SignInScreen productName={PRODUCT_NAME} />;
+    return <VerdictLanding />;
   }
 
   const user = session.user;
