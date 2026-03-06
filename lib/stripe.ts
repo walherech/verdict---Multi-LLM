@@ -1,6 +1,13 @@
 import Stripe from 'stripe';
 
-export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+let _stripe: Stripe | null = null;
+
+export function getStripe(): Stripe {
+  if (!_stripe) {
+    _stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+  }
+  return _stripe;
+}
 
 export const TIER_PRICE_MAP: Record<string, string> = {
   basic: process.env.STRIPE_PRICE_BASIC!,

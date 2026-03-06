@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { stripe, PRICE_TIER_MAP } from '@/lib/stripe';
+import { getStripe, PRICE_TIER_MAP } from '@/lib/stripe';
 import { supabaseAdmin } from '@/lib/supabase';
 import Stripe from 'stripe';
 
@@ -16,7 +16,7 @@ export async function POST(req: NextRequest) {
 
   let event: Stripe.Event;
   try {
-    event = stripe.webhooks.constructEvent(body, sig, process.env.STRIPE_WEBHOOK_SECRET!);
+    event = getStripe().webhooks.constructEvent(body, sig, process.env.STRIPE_WEBHOOK_SECRET!);
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Webhook signature verification failed';
     console.error('[stripe/webhook] Signature error:', message);
@@ -33,7 +33,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Resolve the price ID from the line items
-    const lineItems = await stripe.checkout.sessions.listLineItems(session.id, { limit: 1 });
+    const lineItems = await getStripe().checkout.sessions.listLineItems(session.id, { limit: 1 });
     const priceId = lineItems.data[0]?.price?.id;
     const tierInfo = priceId ? PRICE_TIER_MAP[priceId] : null;
 

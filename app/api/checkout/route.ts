@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
-import { stripe, TIER_PRICE_MAP } from '@/lib/stripe';
+import { getStripe, TIER_PRICE_MAP } from '@/lib/stripe';
 
 export async function POST(req: NextRequest) {
   const session = await getServerSession();
@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
 
   const baseUrl = process.env.NEXTAUTH_URL!;
 
-  const checkoutSession = await stripe.checkout.sessions.create({
+  const checkoutSession = await getStripe().checkout.sessions.create({
     mode: 'subscription',
     payment_method_types: ['card'],
     customer_email: session.user.email,
