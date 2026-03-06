@@ -164,6 +164,9 @@ export default function HomePage() {
   const queriesUsed = userRecord?.queries_used ?? '—';
   const queriesLimit = userRecord?.queries_limit ?? '—';
   const currentTier = userRecord?.tier ?? 'free';
+  const atLimit =
+    userRecord != null &&
+    userRecord.queries_used >= userRecord.queries_limit;
 
   return (
     <main className="min-h-screen bg-[#060606] text-gray-200">
@@ -237,7 +240,23 @@ export default function HomePage() {
               </div>
             )}
 
-            {!loading && (
+            {!loading && atLimit ? (
+              /* ---- Query limit reached ---- */
+              <div className="rounded-2xl border border-amber-500/30 bg-amber-500/5 p-8 text-center">
+                <p className="text-2xl mb-3">⚡</p>
+                <h3 className="text-[18px] font-bold text-white mb-2">You've hit your query limit</h3>
+                <p className="text-[14px] text-gray-500 mb-6">
+                  You've used all {queriesLimit} queries on your {currentTier} plan this month.
+                </p>
+                <button
+                  type="button"
+                  onClick={() => setShowPricing(true)}
+                  className="px-8 py-3 text-[14px] font-semibold bg-amber-500 hover:bg-amber-400 text-black rounded-xl transition-colors"
+                >
+                  Upgrade to continue
+                </button>
+              </div>
+            ) : !loading && (
               <>
                 <textarea
                   value={input}
@@ -255,6 +274,8 @@ export default function HomePage() {
                     showScores={showScores}
                     onShowScoresChange={setShowScores}
                     controlsOnly
+                    tier={currentTier}
+                    onUpgradeClick={() => setShowPricing(true)}
                   />
                 </div>
                 <button

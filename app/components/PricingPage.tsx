@@ -16,6 +16,7 @@ interface Plan {
   models: string;
   features: string[];
   badge?: string;
+  foundingBadge?: boolean;
   cta: string;
 }
 
@@ -27,39 +28,31 @@ const PLANS: Plan[] = [
     period: '',
     queries: '5 queries / month',
     models: '3 models',
-    features: ['Claude + GPT-4 + Grok', 'Clean mode only', 'Standard speed'],
+    features: ['Claude + GPT-4 + Grok', 'Clean mode only', 'Quick mode only'],
     cta: 'Current Plan',
   },
   {
     id: 'basic',
     name: 'Basic',
-    price: '$14.99',
+    price: '$29.99',
     period: '/mo',
     queries: '50 queries / month',
     models: '3 models',
     features: ['Claude + GPT-4 + Grok', 'All personality modes', 'Quick + Deep modes'],
+    foundingBadge: true,
     cta: 'Upgrade to Basic',
   },
   {
     id: 'pro',
     name: 'Pro',
-    price: '$24.99',
+    price: '$49.99',
     period: '/mo',
     queries: '50 queries / month',
     models: '4 models',
-    features: ['+ Gemini added', 'Smart model routing', 'Quick + Deep modes', 'All personality modes'],
+    features: ['+ Gemini added', 'Smart Opus routing', 'Quick + Deep modes', 'All personality modes'],
     badge: 'Most Popular',
+    foundingBadge: true,
     cta: 'Upgrade to Pro',
-  },
-  {
-    id: 'max',
-    name: 'Max',
-    price: '$49.99',
-    period: '/mo',
-    queries: '100 queries / month',
-    models: '4 models',
-    features: ['Claude Opus on everything', 'Max-quality synthesis', 'Priority processing', 'All personality modes'],
-    cta: 'Upgrade to Max',
   },
 ];
 
@@ -87,7 +80,7 @@ export function PricingPage({ currentTier, onClose }: PricingPageProps) {
 
   return (
     <div className="fixed inset-0 bg-[#060606]/95 backdrop-blur-sm z-50 overflow-y-auto">
-      <div className="max-w-[900px] mx-auto px-6 py-12">
+      <div className="max-w-[780px] mx-auto px-6 py-12">
         {/* Header */}
         <div className="flex justify-between items-start mb-10">
           <div>
@@ -95,10 +88,10 @@ export function PricingPage({ currentTier, onClose }: PricingPageProps) {
               Choose your plan
             </h2>
             <p className="text-[15px] text-gray-500">
-              ChatGPT + Claude + Grok + Gemini separately ={' '}
+              ChatGPT ($20) + Claude ($20) + Grok ($22) + Gemini ($20) ={' '}
               <span className="line-through text-gray-600">$82/mo</span>
               {'. '}
-              <span className="text-amber-400 font-semibold">Verdict does it all from $14.99.</span>
+              <span className="text-amber-400 font-semibold">Verdict Pro does it all for $49.99.</span>
             </p>
           </div>
           <button
@@ -111,7 +104,7 @@ export function PricingPage({ currentTier, onClose }: PricingPageProps) {
         </div>
 
         {/* Plans grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           {PLANS.map((plan) => {
             const isCurrentPlan = plan.id === currentTier;
             const isPro = plan.id === 'pro';
@@ -144,6 +137,11 @@ export function PricingPage({ currentTier, onClose }: PricingPageProps) {
                       <span className="text-[13px] text-gray-500">{plan.period}</span>
                     )}
                   </div>
+                  {plan.foundingBadge && (
+                    <p className="text-[11px] text-amber-500/70 mt-1 font-mono">
+                      ★ Founding Member — lock in this rate forever
+                    </p>
+                  )}
                 </div>
 
                 <div className="flex flex-col gap-1.5">
