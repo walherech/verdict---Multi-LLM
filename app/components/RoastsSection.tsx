@@ -29,14 +29,10 @@ export function RoastsSection({ soloCommentary, engineCommentary, disclaimer, sh
         ROASTS & COMMENTARY 🔥
       </h3>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-2">
-        {soloCommentary.map((c) => (
+        {soloCommentary.filter((c) => c.score != null && c.roast).map((c) => (
           <div
             key={c.model}
-            className={`rounded-xl border p-4 flex flex-col gap-2 ${
-              c.score === null
-                ? 'bg-[#0a0a0a] border-dashed border-[#1a1a1a]'
-                : 'bg-[#0c0c0c] border-[#1a1a1a]'
-            }`}
+            className="rounded-xl border bg-[#0c0c0c] border-[#1a1a1a] p-4 flex flex-col gap-2"
           >
             <div className="flex items-center gap-2">
               <span
@@ -48,12 +44,9 @@ export function RoastsSection({ soloCommentary, engineCommentary, disclaimer, sh
               {showScores && c.score != null && (
                 <ScoreBadge score={c.score} size="sm" />
               )}
-              {showScores && c.score === null && (
-                <span className="text-[9px] text-gray-600 font-mono">DNP</span>
-              )}
             </div>
-            <p className={`text-sm leading-relaxed italic ${c.score === null ? 'text-gray-600' : 'text-gray-400'}`}>
-              &quot;{c.roast || '—'}&quot;
+            <p className="text-sm leading-relaxed italic text-gray-400">
+              &quot;{c.roast}&quot;
             </p>
           </div>
         ))}

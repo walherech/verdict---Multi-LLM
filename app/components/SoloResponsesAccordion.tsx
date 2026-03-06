@@ -18,7 +18,6 @@ interface SoloResponsesAccordionProps {
 }
 
 const SECTIONS: { key: keyof Pick<SoloResponsesAccordionProps, 'research' | 'analysis' | 'synthesis' | 'critique'>; label: string; modelName: string }[] = [
-  { key: 'research', label: 'Research', modelName: 'Perplexity' },
   { key: 'analysis', label: 'Analysis', modelName: 'Claude' },
   { key: 'synthesis', label: 'Synthesis', modelName: 'GPT-4' },
   { key: 'critique', label: 'Critique', modelName: 'Grok' },
@@ -38,7 +37,6 @@ export function SoloResponsesAccordion({
   const byModel = Object.fromEntries(soloBenchmarks.map((b) => [b.model, b]));
 
   const modelColors: Record<string, string> = {
-    Perplexity: '#3b82f6',
     Claude: '#d97706',
     'GPT-4': '#10b981',
     Grok: '#6366f1',
@@ -60,7 +58,7 @@ export function SoloResponsesAccordion({
       </button>
       {mainOpen && (
         <div className="space-y-1 mt-1">
-          {SECTIONS.map(({ key, label, modelName }) => {
+          {SECTIONS.filter(({ key }) => !!data[key]).map(({ key, label, modelName }) => {
             const content = data[key];
             const score = byModel[modelName]?.score ?? null;
             const isExpanded = expandedKey === key;

@@ -151,7 +151,7 @@ export function InputSection({
         value={value}
         onChange={(e) => onChange?.(e.target.value)}
         placeholder="Strategy, research, tax questions, business decisions..."
-        className="w-full min-h-[160px] bg-[#0c0c0c] border border-[#1a1a1a] rounded-[14px] px-5 py-4 text-[15px] text-white placeholder-gray-600 focus:outline-none focus:border-amber-500/40 transition-colors resize-y"
+        className="w-full min-h-[160px] bg-[#0c0c0c] border border-[#1a1a1a] rounded-[14px] px-5 py-4 text-[16px] text-white placeholder-gray-600 focus:outline-none focus:border-amber-500/40 transition-colors resize-y"
         disabled={loading}
       />
       {controlsRow}

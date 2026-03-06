@@ -5,6 +5,12 @@ import { SessionProviderWrapper } from '@/app/components/SessionProviderWrapper'
 
 const inter = Inter({ subsets: ['latin'] })
 
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+}
+
 export const metadata: Metadata = {
   title: 'Verdict — Multiple AIs. One Answer.',
   description: 'Multiple AIs. One answer. No mercy.',

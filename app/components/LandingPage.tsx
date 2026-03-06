@@ -288,6 +288,14 @@ export default function VerdictLanding() {
         @media (max-width: 768px) {
           .math-grid { grid-template-columns: 1fr !important; }
           .steps-grid { grid-template-columns: 1fr 1fr !important; }
+          .hero-cta { flex-direction: column !important; align-items: stretch !important; width: 100%; max-width: 360px; margin-left: auto; margin-right: auto; }
+          .hero-cta button, .hero-cta .cta-primary, .hero-cta .cta-ghost { width: 100% !important; text-align: center; }
+          .demo-grid { grid-template-columns: 1fr !important; }
+        }
+        @media (max-width: 480px) {
+          .steps-grid { grid-template-columns: 1fr !important; }
+          .nav-links { display: none !important; }
+          nav { padding: 14px 20px !important; }
         }
       `}</style>
 
@@ -316,7 +324,7 @@ export default function VerdictLanding() {
             borderRadius: "100px",
           }}>BETA</span>
         </div>
-        <div style={{ display: "flex", alignItems: "center", gap: 32 }}>
+        <div className="nav-links" style={{ display: "flex", alignItems: "center", gap: 32 }}>
           <a href="#how" className="nav-link">How It Works</a>
           <a href="#pricing" className="nav-link">Pricing</a>
         </div>
@@ -433,8 +441,8 @@ export default function VerdictLanding() {
           <div className="math-grid" style={{ display: "grid", gridTemplateColumns: "1fr 80px 1fr", gap: 24, alignItems: "center", marginBottom: 48 }}>
             <div style={{ background: "var(--card)", border: "1px solid var(--card-border)", padding: "40px 36px" }}>
               <div className="bebas" style={{ fontSize: "0.8rem", letterSpacing: "0.2em", color: "var(--muted)", marginBottom: 20 }}>WHAT YOU&apos;RE DOING NOW</div>
-              <div className="bebas" style={{ fontSize: "clamp(2.5rem, 6vw, 4rem)", color: "rgba(242,237,228,0.25)", textDecoration: "line-through", marginBottom: 20, lineHeight: 1 }}>$60/mo</div>
-              {[["ChatGPT Plus", "$20/mo"], ["Claude Pro", "$20/mo"], ["Grok Premium", "$20/mo"]].map(([name, price]) => (
+              <div className="bebas" style={{ fontSize: "clamp(2.5rem, 6vw, 4rem)", color: "rgba(242,237,228,0.25)", textDecoration: "line-through", marginBottom: 20, lineHeight: 1 }}>$62/mo</div>
+              {[["ChatGPT Plus", "$20/mo"], ["Claude Pro", "$20/mo"], ["Grok Premium", "$22/mo"]].map(([name, price]) => (
                 <div key={name} style={{ display: "flex", justifyContent: "space-between", padding: "10px 0", borderTop: "1px solid var(--card-border)", color: "var(--muted)", fontSize: "0.88rem" }}>
                   <span>{name}</span><span>{price}</span>
                 </div>

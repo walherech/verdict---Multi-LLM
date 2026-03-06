@@ -48,8 +48,8 @@ const PLANS: Plan[] = [
     price: '$49.99',
     period: '/mo',
     queries: '50 queries / month',
-    models: '4 models',
-    features: ['+ Gemini added', 'Smart Opus routing', 'Quick + Deep modes', 'All personality modes'],
+    models: '3 models',
+    features: ['Claude + GPT-4 + Grok', 'Deep mode + smart routing', 'Quick + Deep modes', 'All personality modes'],
     badge: 'Most Popular',
     foundingBadge: true,
     cta: 'Upgrade to Pro',
@@ -88,10 +88,10 @@ export function PricingPage({ currentTier, onClose }: PricingPageProps) {
               Choose your plan
             </h2>
             <p className="text-[15px] text-gray-500">
-              ChatGPT ($20) + Claude ($20) + Grok ($22) + Gemini ($20) ={' '}
-              <span className="line-through text-gray-600">$82/mo</span>
+              ChatGPT ($20) + Claude ($20) + Grok ($22) ={' '}
+              <span className="line-through text-gray-600">$62/mo</span>
               {'. '}
-              <span className="text-amber-400 font-semibold">Verdict Pro does it all for $49.99.</span>
+              <span className="text-amber-400 font-semibold">Verdict does it all for $29.99.</span>
             </p>
           </div>
           <button

@@ -22,8 +22,7 @@ function modelColor(score: number | null): string {
 }
 
 export function Scoreboard({ soloBenchmarks, engineScore, engineModelLabel = 'Verdict' }: ScoreboardProps) {
-  const allModels = ['Perplexity', 'Claude', 'GPT-4', 'Grok'];
-  const byModel = Object.fromEntries(soloBenchmarks.map((b) => [b.model, b]));
+  const models = soloBenchmarks.filter((b) => b.score != null);
 
   return (
     <section className="mb-6">
@@ -37,26 +36,18 @@ export function Scoreboard({ soloBenchmarks, engineScore, engineModelLabel = 'Ve
           </div>
           <p className="text-xs font-semibold text-amber-500 mt-2 font-mono">{engineModelLabel}</p>
         </div>
-        {allModels.map((name) => {
-          const b = byModel[name];
-          const score = b?.score ?? null;
-          const color = modelColor(score);
+        {models.map((b) => {
+          const color = modelColor(b.score);
           return (
             <div
-              key={name}
+              key={b.model}
               className="bg-[#0c0c0c] border border-[#1a1a1a] rounded-xl p-4 text-center"
             >
-              {score !== null ? (
-                <div className="flex justify-center">
-                  <ScoreBadge score={score} size="md" />
-                </div>
-              ) : (
-                <div className="flex justify-center items-center h-[52px]">
-                  <span className="text-lg font-mono font-bold text-gray-600">--</span>
-                </div>
-              )}
+              <div className="flex justify-center">
+                <ScoreBadge score={b.score} size="md" />
+              </div>
               <p className="text-xs font-semibold mt-2 font-mono" style={{ color }}>
-                {name}
+                {b.model}
               </p>
             </div>
           );
