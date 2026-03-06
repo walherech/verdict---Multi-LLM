@@ -1,8 +1,6 @@
 import Stripe from 'stripe';
 
-export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2024-06-20',
-});
+export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
 export const TIER_PRICE_MAP: Record<string, string> = {
   basic: process.env.STRIPE_PRICE_BASIC!,
