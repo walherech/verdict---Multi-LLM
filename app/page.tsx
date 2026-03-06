@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { SignInScreen } from '@/app/components/SignInScreen';
 import { InputSection, type ResponseMode, type Personality } from '@/app/components/InputSection';
 import { LoadingSection } from '@/app/components/LoadingSection';
@@ -10,6 +11,7 @@ import { Scoreboard } from '@/app/components/Scoreboard';
 import { RoastsSection } from '@/app/components/RoastsSection';
 import { SoloResponsesAccordion } from '@/app/components/SoloResponsesAccordion';
 import { Footer } from '@/app/components/Footer';
+import { PricingPage } from '@/app/components/PricingPage';
 import Image from 'next/image';
 
 const PRODUCT_NAME = 'VERDICT';
@@ -47,7 +49,12 @@ interface ApiResult {
 
 export default function HomePage() {
   const { data: session, status } = useSession();
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
   const [userRecord, setUserRecord] = useState<UserRecord | null>(null);
+  const [showPricing, setShowPricing] = useState(false);
+  const [checkoutBanner, setCheckoutBanner] = useState<'success' | 'cancel' | null>(null);
   const [input, setInput] = useState('');
   const [mode, setMode] = useState<ResponseMode>('deep');
   const [personality, setPersonality] = useState<Personality>('savage');
@@ -68,6 +75,26 @@ export default function HomePage() {
         .catch(console.error);
     }
   }, [session?.user?.email]);
+
+  // Handle ?checkout=success / ?checkout=cancel from Stripe redirect
+  useEffect(() => {
+    const checkout = searchParams.get('checkout');
+    if (checkout === 'success' || checkout === 'cancel') {
+      setCheckoutBanner(checkout);
+      // Re-sync user record in case tier was upgraded
+      if (checkout === 'success' && session?.user?.email) {
+        fetch('/api/user/sync', { method: 'POST' })
+          .then((r) => r.json())
+          .then((data) => { if (data.tier) setUserRecord(data); })
+          .catch(console.error);
+      }
+      // Remove query param without page reload
+      router.replace('/');
+      // Auto-dismiss banner
+      const t = setTimeout(() => setCheckoutBanner(null), 6000);
+      return () => clearTimeout(t);
+    }
+  }, [searchParams, session?.user?.email, router]);
 
   async function handleSubmit() {
     const problem = input.trim();
@@ -136,9 +163,27 @@ export default function HomePage() {
   const initials = user?.name ? user.name.split(' ').map((n) => n[0]).join('').slice(0, 2).toUpperCase() : '?';
   const queriesUsed = userRecord?.queries_used ?? '—';
   const queriesLimit = userRecord?.queries_limit ?? '—';
+  const currentTier = userRecord?.tier ?? 'free';
 
   return (
     <main className="min-h-screen bg-[#060606] text-gray-200">
+      {/* Checkout banner */}
+      {checkoutBanner && (
+        <div className={`fixed top-4 left-1/2 -translate-x-1/2 z-50 px-5 py-3 rounded-xl text-sm font-medium shadow-lg border ${
+          checkoutBanner === 'success'
+            ? 'bg-green-500/10 border-green-500/40 text-green-400'
+            : 'bg-[#1a1a1a] border-[#2a2a2a] text-gray-400'
+        }`}>
+          {checkoutBanner === 'success'
+            ? '✓ Subscription activated! Your plan has been upgraded.'
+            : 'Checkout cancelled. Your plan was not changed.'}
+        </div>
+      )}
+
+      {showPricing && (
+        <PricingPage currentTier={currentTier} onClose={() => setShowPricing(false)} />
+      )}
+
       <header className="py-5 px-8 flex justify-between items-center border-b border-[#111]">
         <div className="flex items-center gap-2.5">
           <span className="text-xl">⚡</span>
@@ -149,6 +194,14 @@ export default function HomePage() {
         </div>
         <div className="flex items-center gap-3 text-[13px] text-gray-500">
           <span className="font-mono text-xs">{queriesUsed} / {queriesLimit} queries</span>
+          {currentTier === 'free' && (
+            <button
+              onClick={() => setShowPricing(true)}
+              className="text-[11px] font-semibold text-amber-500 bg-amber-500/10 hover:bg-amber-500/20 px-3 py-1 rounded-full transition-colors"
+            >
+              Upgrade
+            </button>
+          )}
           {user?.image ? (
             <Image
               src={user.image}
